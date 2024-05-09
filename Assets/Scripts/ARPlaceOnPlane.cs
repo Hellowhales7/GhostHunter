@@ -15,16 +15,14 @@ public class ARPlaceOnPlane : MonoBehaviour
     GameObject spawnObject;
     public List<GameObject> spawnList = new List<GameObject>();
     public List<GameObject> ObjectList = new List<GameObject>();
-    float time = 10.0f;
-    float timeset = 10.0f;
-    float rotationspeed = 5f;
 
+    public ARSceneManager sceneManager;
     public float detectionWidth = 0.1f; // 네모 반경의 폭 (화면 너비의 비율)
     public float detectionHeight = 0.1f; // 네모 반경의 높이 (화면 높이의 비율)
                                          // Start is called before the first frame update
 
     public ARPlaneManager planeManager; // AR Plane Manager
-    public float spawnInterval = 5f; // 오브젝트 생성 간격 (초)
+    public float spawnInterval = 10f; // 오브젝트 생성 간격 (초)
     private Dictionary<ARPlane, GameObject> placedObjects = new Dictionary<ARPlane, GameObject>(); // 각 평면에 배치된 오브젝트 추적
     void Start()
     {
@@ -38,6 +36,8 @@ public class ARPlaceOnPlane : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (spawnList.Count > 10)
+            sceneManager.GoToDefeat();
         PlaceObjectByTouch();
         DetectGhost();
     }
@@ -134,7 +134,7 @@ public class ARPlaceOnPlane : MonoBehaviour
             {
                 DebugText.text = "Detect Ghost : " + spawnGhost.name;
                 Enemy Temp = spawnGhost.GetComponent<Enemy>();
-                Temp.detect = true;
+                Temp.CountDown();
                 // 중앙 네모 반경 내에 있을 때 원하는 동작 실행
             }
         }

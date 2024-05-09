@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour
     public float moveSpeed = 0.5f; // 초당 이동 속도
     private Camera arCamera;
     public bool detect = false;
-    int Counter = 3;
+    int Counter = 2;
     float CounterTerm = 3.0f;
     float CounterTimer = 0.0f;
     void Start()
@@ -35,7 +35,7 @@ public class Enemy : MonoBehaviour
         CounterTimer += Time.deltaTime;
         if (Counter < 0)
         {
-            Vector3 cameraPosition = Camera.current.transform.position;
+            Vector3 cameraPosition = Camera.current.transform.position /*+ Vector3.down*/;
             Vector3 directionToCamera = (cameraPosition - transform.position).normalized;
 
             // 부드럽게 이동하기 위해 directionToCamera에 이동 속도와 delta 타임을 곱합니다.
