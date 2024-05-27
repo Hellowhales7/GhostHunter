@@ -6,7 +6,8 @@ public class CameraFilter : MonoBehaviour
 {
     // Start is called before the first frame update
     public Image PanelImage;
-    private int PanelState = 0;
+    public int PanelState = 0;
+    public ARPlaceOnPlane ARP;
     void Start()
     {
         PanelImage = GetComponent<Image>();
@@ -21,6 +22,28 @@ public class CameraFilter : MonoBehaviour
     {
         PanelState = (PanelState + 1) % 4;
         ChangePanelColor();
+        foreach(GameObject obj in ARP.spawnList)
+        {
+             if (PanelState == obj.GetComponent<Enemy>().part)
+             {
+                 obj.SetActive(true);
+             }
+             else
+             {
+                 obj.SetActive(false);
+             }
+        }
+        foreach (GameObject obj in ARP.spawnItemList)
+        {
+            if (PanelState == 0)
+            {
+                obj.SetActive(true);
+            }
+            else if (PanelState != 0)
+            {
+                obj.SetActive(false);
+            }
+        }
     }
     public void ChangePanelColor()
     {

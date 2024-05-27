@@ -7,15 +7,19 @@ using TMPro;
 using System.Linq;
 using Unity.VisualScripting;
 
+
 public class ARPlaceOnPlane : MonoBehaviour
 {
     public ARRaycastManager arRaycaster;
+    public CameraFilter cameraFilter;
     public GameObject placeObject;
     public TextMeshProUGUI DebugText;
     GameObject spawnObject;
+
     public List<GameObject> spawnList = new List<GameObject>();
     public List<GameObject> ObjectList = new List<GameObject>();
-
+    public GameObject[] ItemList = new GameObject[3];
+    public List<GameObject> spawnItemList= new List<GameObject>();
     public ARSceneManager sceneManager;
     public float detectionWidth = 0.1f; // 네모 반경의 폭 (화면 너비의 비율)
     public float detectionHeight = 0.1f; // 네모 반경의 높이 (화면 높이의 비율)
@@ -36,13 +40,38 @@ public class ARPlaceOnPlane : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (spawnList.Count > 10)
+        DebugText.text = spawnList.Count.ToString();
+        if (spawnList.Count > 5)
             sceneManager.GoToDefeat();
-        PlaceObjectByTouch();
+       // PlaceObjectByTouch();
         DetectGhost();
+        //foreach( GameObject obj in spawnList)
+        //{
+        //    if(cameraFilter.PanelState == obj.GetComponent<Enemy>().part)
+        //    {
+        //        obj.SetActive(true);
+        //    }
+        //    else
+        //    {
+        //        obj.SetActive(false);
+        //    }
+        //}
+        ////foreach( GameObject obj in spawnItemList)
+        ////{
+        ////    if(cameraFilter.PanelState == 0)
+        ////    {
+        ////        obj.SetActive(true);
+        ////    }
+        ////    else if (cameraFilter.PanelState != 0)
+        ////    {
+        ////        obj.SetActive(false);
+        ////    }
+        ////}
     }
     void PlaceObjectOnRandomPlane()
     {
+        if (spawnList.Count >= 9)
+            return;
         // 사용 가능한 평면 목록 가져오기
         List<ARPlane> availablePlanes = new List<ARPlane>();
         foreach (ARPlane plane in planeManager.trackables)
@@ -69,36 +98,53 @@ public class ARPlaceOnPlane : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(0, Random.Range(0, 360), 0); // 무작위 회전
         int index = Random.Range(0, ObjectList.Count);
         GameObject placedObject = Instantiate(ObjectList[index], position, rotation);
-        placedObject.SetActive(true);
+        if (cameraFilter.PanelState == placedObject.GetComponent<Enemy>().part)
+            placedObject.SetActive(true);
+        else
+            placedObject.SetActive(false);
         placedObjects.Add(selectedPlane, placedObject);
         spawnList.Add(placedObject);
+
+        randomIndex = Random.Range(0, availablePlanes.Count);
+        selectedPlane = availablePlanes[randomIndex];
+
+        position = selectedPlane.transform.position;
+        rotation = Quaternion.Euler(0, Random.Range(0, 360), 0); // 무작위 회전
+        GameObject placedItem = Instantiate(ItemList[placedObject.GetComponent<Enemy>().part - 1], position, rotation);
+        if (cameraFilter.PanelState == 0)
+            placedObject.SetActive(true);
+        else
+            placedObject.SetActive(false);
+        placedObjects.Add(selectedPlane, placedItem);
+        spawnItemList.Add(placedItem);
+
     }
-    private void PlaceObjectByTouch() // 터치로 생성
-    {
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-            List<ARRaycastHit> hits = new List<ARRaycastHit>();
+    //private void PlaceObjectByTouch() // 터치로 생성
+    //{
+    //    if (Input.touchCount > 0)
+    //    {
+    //        Touch touch = Input.GetTouch(0);
+    //        List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
-            if (arRaycaster.Raycast(touch.position, hits, UnityEngine.XR.ARSubsystems.TrackableType.Planes))
-            {
-                Pose hitPose = hits[0].pose;
-                Vector3 cameraPos = Camera.current.transform.position;
-                Vector3 lookAtDirection = (cameraPos - transform.position).normalized;
+    //        if (arRaycaster.Raycast(touch.position, hits, UnityEngine.XR.ARSubsystems.TrackableType.Planes))
+    //        {
+    //            Pose hitPose = hits[0].pose;
+    //            Vector3 cameraPos = Camera.current.transform.position;
+    //            Vector3 lookAtDirection = (cameraPos - transform.position).normalized;
 
-                if (!spawnObject)
-                {
+    //            if (!spawnObject)
+    //            {
 
-                    spawnObject = Instantiate(placeObject, hitPose.position, hitPose.rotation * Quaternion.Euler(0,180,0));//Quaternion.LookRotation(lookAtDirection));
-                }
-                else
-                {
-                    spawnObject.transform.position = hitPose.position;
-                    spawnObject.transform.rotation = hitPose.rotation;//Quaternion.LookRotation(lookAtDirection);
-                }
-            }
-        }
-    }
+    //                spawnObject = Instantiate(placeObject, hitPose.position, hitPose.rotation * Quaternion.Euler(0,180,0));//Quaternion.LookRotation(lookAtDirection));
+    //            }
+    //            else
+    //            {
+    //                spawnObject.transform.position = hitPose.position;
+    //                spawnObject.transform.rotation = hitPose.rotation;//Quaternion.LookRotation(lookAtDirection);
+    //            }
+    //        }
+    //    }
+    //}
     private void DetectGhost()
     {
 
@@ -140,28 +186,28 @@ public class ARPlaceOnPlane : MonoBehaviour
         }
     }
     
-    private bool UpdateCenterObject() // 가운데에 생성
-    {
-        Vector3 screenCenter = Camera.current.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
-        //current.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
-        Debug.Log(screenCenter);
-        List<ARRaycastHit> hits = new List<ARRaycastHit>();
-        arRaycaster.Raycast(screenCenter, hits, UnityEngine.XR.ARSubsystems.TrackableType.Planes);
+    //private bool UpdateCenterObject() // 가운데에 생성
+    //{
+    //    Vector3 screenCenter = Camera.current.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
+    //    //current.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
+    //    Debug.Log(screenCenter);
+    //    List<ARRaycastHit> hits = new List<ARRaycastHit>();
+    //    arRaycaster.Raycast(screenCenter, hits, UnityEngine.XR.ARSubsystems.TrackableType.Planes);
 
-        if (hits.Count > 0)
-        {
-            Vector3 cameraPos = Camera.current.transform.position;
-            Vector3 lookAtDirection = (cameraPos -transform.position).normalized;
+    //    if (hits.Count > 0)
+    //    {
+    //        Vector3 cameraPos = Camera.current.transform.position;
+    //        Vector3 lookAtDirection = (cameraPos -transform.position).normalized;
 
-            Pose placementPose = hits[0].pose;
+    //        Pose placementPose = hits[0].pose;
             
-            spawnObject = Instantiate(placeObject, placementPose.position, Quaternion.LookRotation(lookAtDirection));
-            spawnObject.SetActive(true);
-            return true;
-            //placeObject.SetActive(true);
-            //placeObject.transform.SetPositionAndRotation(placementPose.position, placementPose.rotation);
-        }
-        return false;
-    }
+    //        spawnObject = Instantiate(placeObject, placementPose.position, Quaternion.LookRotation(lookAtDirection));
+    //        spawnObject.SetActive(true);
+    //        return true;
+    //        //placeObject.SetActive(true);
+    //        //placeObject.transform.SetPositionAndRotation(placementPose.position, placementPose.rotation);
+    //    }
+    //    return false;
+    //}
 
 }
