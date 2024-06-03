@@ -4,61 +4,61 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using TMPro;
-using System.Linq;
-using Unity.VisualScripting;
-using UnityEngine.EventSystems;
-
 public class ARObjectClickHandler : MonoBehaviour
 {
-    private ARRaycastManager arRaycastManager;
-    private List<ARRaycastHit> hits = new List<ARRaycastHit>();
-    private int Exocism1 = 0;
-    private int Exocism2 = 0;
-    private int Exocism3 = 0;
+    int exocism1 = 0;
+    int exocism2 = 0;
+    int exocism3 = 0;
+
+    public ARRaycastManager _arRaycastManager;
+    public TextMeshProUGUI item1;
+    public TextMeshProUGUI item2;
+    public TextMeshProUGUI item3;
+    private static List<ARRaycastHit> _hits = new List<ARRaycastHit>();
 
     void Start()
     {
-        arRaycastManager = FindObjectOfType<ARRaycastManager>();
+        //_arRaycastManager = GetComponent<ARRaycastManager>();
     }
 
     void Update()
     {
-        // 터치 감지
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-
             if (touch.phase == TouchPhase.Began)
             {
-                // UI 클릭이면 무시
-                if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                // 스크린 터치 위치에서 Raycast를 실행
+                if (_arRaycastManager.Raycast(touch.position, _hits, TrackableType.PlaneWithinPolygon))
                 {
-                    return;
-                }
+                    // Raycast 결과 중 첫 번째 히트
+                    var hitPose = _hits[0].pose;
 
-                // 터치 위치에서 Ray 생성
-                if (arRaycastManager.Raycast(touch.position, hits, TrackableType.PlaneWithinPolygon))
-                {
-                    var hitPose = hits[0].pose;
-
-                    // RaycastHit을 이용해 오브젝트 획득 처리
+                    // 히트된 위치에 있는 오브젝트 찾기
                     Ray ray = Camera.main.ScreenPointToRay(touch.position);
-                    RaycastHit hit;
-                    if (Physics.Raycast(ray, out hit))
+                    RaycastHit hitObject;
+                    if (Physics.Raycast(ray, out hitObject))
                     {
-                        if (hit.collider.gameObject.GetComponent<Item>().part == 1)
+                        Item arObject = hitObject.transform.GetComponent<Item>();
+                        if (arObject != null)
                         {
-                            Exocism1++;
+                            if (arObject.part == 1)
+                            {
+                                exocism1++;
+                                item1.text = exocism1.ToString();
+                            }
+                            else if (arObject.part == 2)
+                            {
+                                exocism2++;
+                                item2.text = exocism2.ToString();
+                            }
+                            else if (arObject.part == 3)
+                            {
+                                exocism3++;
+                                item3.text = exocism3.ToString();
+                            }
+                                arObject.OnObjectTouched();
                         }
-                        else if(hit.collider.gameObject.GetComponent<Item>().part == 2)
-                        {
-                            Exocism2++;
-                        }
-                        else if(hit.collider.gameObject.GetComponent<Item>().part == 3)
-                        {
-                            Exocism3++;
-                        }
-                        Destroy(hit.collider.gameObject);
                     }
                 }
             }

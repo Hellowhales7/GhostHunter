@@ -45,28 +45,6 @@ public class ARPlaceOnPlane : MonoBehaviour
             sceneManager.GoToDefeat();
        // PlaceObjectByTouch();
         DetectGhost();
-        //foreach( GameObject obj in spawnList)
-        //{
-        //    if(cameraFilter.PanelState == obj.GetComponent<Enemy>().part)
-        //    {
-        //        obj.SetActive(true);
-        //    }
-        //    else
-        //    {
-        //        obj.SetActive(false);
-        //    }
-        //}
-        ////foreach( GameObject obj in spawnItemList)
-        ////{
-        ////    if(cameraFilter.PanelState == 0)
-        ////    {
-        ////        obj.SetActive(true);
-        ////    }
-        ////    else if (cameraFilter.PanelState != 0)
-        ////    {
-        ////        obj.SetActive(false);
-        ////    }
-        ////}
     }
     void PlaceObjectOnRandomPlane()
     {
@@ -105,18 +83,24 @@ public class ARPlaceOnPlane : MonoBehaviour
         placedObjects.Add(selectedPlane, placedObject);
         spawnList.Add(placedObject);
 
+        if (cameraFilter.PanelState == placedObject.GetComponent<Enemy>().part)
+            placedObject.SetActive(true);
+        else
+            placedObject.SetActive(false);
+
         randomIndex = Random.Range(0, availablePlanes.Count);
         selectedPlane = availablePlanes[randomIndex];
 
         position = selectedPlane.transform.position;
         rotation = Quaternion.Euler(0, Random.Range(0, 360), 0); // 무작위 회전
         GameObject placedItem = Instantiate(ItemList[placedObject.GetComponent<Enemy>().part - 1], position, rotation);
-        if (cameraFilter.PanelState == 0)
-            placedObject.SetActive(true);
-        else
-            placedObject.SetActive(false);
+
         placedObjects.Add(selectedPlane, placedItem);
         spawnItemList.Add(placedItem);
+        if (cameraFilter.PanelState == 0)
+            placedItem.SetActive(true);
+        else
+            placedItem.SetActive(false);
 
     }
     //private void PlaceObjectByTouch() // 터치로 생성

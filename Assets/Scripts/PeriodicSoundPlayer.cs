@@ -24,7 +24,7 @@ public class PeriodicSoundPlayer : MonoBehaviour
         audioSource.spatialBlend = 1.0f;  // 3D 사운드로 설정
         audioSource.loop = false;  // 반복 재생 비활성화
         audioSource.rolloffMode = AudioRolloffMode.Logarithmic;  // 거리 감쇠 설정
-        audioSource.minDistance = 0.0f;  // 최소 거리 설정
+        audioSource.minDistance = 1.0f;  // 최소 거리 설정
         audioSource.maxDistance = 50.0f;  // 최대 거리 설정
 
         timer = interval;  // 타이머 초기화
