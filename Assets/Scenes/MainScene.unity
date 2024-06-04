@@ -447,11 +447,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 45
   moveSpeed: 0.5
-  arCamera: {fileID: 0}
+  arCamera: {fileID: 22732920}
   detect: 0
+  objectname: 
   part: 1
   cameraFilter: {fileID: 1656936491}
+  sceneManager: {fileID: 1355917286}
   visibilityDistance: 4
+  triggerDistance: 1
 --- !u!1 &40919614
 GameObject:
   m_ObjectHideFlags: 0
@@ -1258,7 +1261,7 @@ RectTransform:
   m_GameObject: {fileID: 604514269}
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 6, z: 1}
+  m_LocalScale: {x: 1.1, y: 6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 944703871}
@@ -1267,7 +1270,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -4, y: -708}
+  m_AnchoredPosition: {x: -4, y: -712}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &604514271
@@ -1314,13 +1317,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 604514269}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 604514274}
+        m_TargetAssemblyTypeName: Attck, Assembly-CSharp
+        m_MethodName: Attacker
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1376,6 +1379,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1725e591fc1d7e34eba1c182250eb5c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arObjectClickHandler: {fileID: 1222877123}
+  arPlaceOnPlane: {fileID: 1939119458}
+  arCameraFilter: {fileID: 1656936491}
+  detectionWidth: 0.5
+  detectionHeight: 0.5
 --- !u!1 &643630470
 GameObject:
   m_ObjectHideFlags: 0
@@ -1835,9 +1843,12 @@ MonoBehaviour:
   moveSpeed: 1
   arCamera: {fileID: 22732920}
   detect: 0
+  objectname: priest
   part: 3
   cameraFilter: {fileID: 1656936491}
+  sceneManager: {fileID: 1355917286}
   visibilityDistance: 4
+  triggerDistance: 1
 --- !u!114 &755773919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3326,9 +3337,12 @@ MonoBehaviour:
   moveSpeed: 0.5
   arCamera: {fileID: 22732920}
   detect: 0
+  objectname: 
   part: 2
   cameraFilter: {fileID: 1656936491}
+  sceneManager: {fileID: 1355917286}
   visibilityDistance: 4
+  triggerDistance: 1
 --- !u!114 &1432097114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3567,7 +3581,7 @@ RectTransform:
   m_GameObject: {fileID: 1656936487}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0000002, y: 1.0000002, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1395020211}
@@ -4139,6 +4153,7 @@ MonoBehaviour:
   sceneManager: {fileID: 1355917286}
   detectionWidth: 0.5
   detectionHeight: 0.5
+  rectangleColor: {r: 1, g: 0, b: 0, a: 0.33333334}
   planeManager: {fileID: 388525032}
   spawnInterval: 10
 --- !u!4 &1939119459
@@ -4341,9 +4356,12 @@ MonoBehaviour:
   moveSpeed: 0.5
   arCamera: {fileID: 22732920}
   detect: 0
+  objectname: 
   part: 2
   cameraFilter: {fileID: 1656936491}
+  sceneManager: {fileID: 1355917286}
   visibilityDistance: 4
+  triggerDistance: 1
 --- !u!4 &212175866532230322
 Transform:
   m_ObjectHideFlags: 0

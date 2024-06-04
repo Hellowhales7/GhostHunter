@@ -23,7 +23,7 @@ public class ARPlaceOnPlane : MonoBehaviour
     public ARSceneManager sceneManager;
     public float detectionWidth = 0.1f; // 네모 반경의 폭 (화면 너비의 비율)
     public float detectionHeight = 0.1f; // 네모 반경의 높이 (화면 높이의 비율)
-                                         // Start is called before the first frame update
+    public Color rectangleColor = Color.red;  // 네모 색상             
 
     public ARPlaneManager planeManager; // AR Plane Manager
     public float spawnInterval = 10f; // 오브젝트 생성 간격 (초)
@@ -35,6 +35,7 @@ public class ARPlaceOnPlane : MonoBehaviour
             planeManager = FindObjectOfType<ARPlaneManager>();
         }
         InvokeRepeating("PlaceObjectOnRandomPlane", spawnInterval, spawnInterval);
+        // OnGUI();
     }
 
     // Update is called once per frame
@@ -169,7 +170,32 @@ public class ARPlaceOnPlane : MonoBehaviour
             }
         }
     }
-    
+    private void OnGUI()
+    {
+        // 화면 너비와 높이
+        float screenWidth = Screen.width;
+        float screenHeight = Screen.height;
+
+        // 네모의 실제 너비와 높이
+        float rectWidth = screenWidth * detectionWidth;
+        float rectHeight = screenHeight * detectionHeight;
+
+        // 네모의 좌상단 위치 계산
+        float rectX = (screenWidth - rectWidth) / 2;
+        float rectY = (screenHeight - rectHeight) / 2;
+
+        // 기존 GUI 색상을 저장합니다.
+        Color oldColor = GUI.color;
+
+        // 네모 색상을 설정합니다.
+        GUI.color = rectangleColor;
+
+        // 네모를 그립니다.
+        GUI.DrawTexture(new Rect(rectX, rectY, rectWidth, rectHeight), Texture2D.whiteTexture);
+
+        // GUI 색상을 원래대로 돌려놓습니다.
+        GUI.color = oldColor;
+    }
     //private bool UpdateCenterObject() // 가운데에 생성
     //{
     //    Vector3 screenCenter = Camera.current.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
@@ -184,7 +210,7 @@ public class ARPlaceOnPlane : MonoBehaviour
     //        Vector3 lookAtDirection = (cameraPos -transform.position).normalized;
 
     //        Pose placementPose = hits[0].pose;
-            
+
     //        spawnObject = Instantiate(placeObject, placementPose.position, Quaternion.LookRotation(lookAtDirection));
     //        spawnObject.SetActive(true);
     //        return true;

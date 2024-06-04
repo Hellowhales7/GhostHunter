@@ -64,4 +64,28 @@ public class ARObjectClickHandler : MonoBehaviour
             }
         }
     }
+    public int Getexocism1()
+    {
+        return exocism1;
+    }
+    public int Getexocism2()
+    {
+        return exocism2;
+    }
+    public int Getexocism3()
+    {
+        return exocism3;
+    }
+    public void Setexocism1(int x)
+    {
+        exocism1 += x;
+    }
+    public void Setexocism2(int x)
+    {
+        exocism2 += x;
+    }
+    public void Setexocism3(int x)
+    {
+        exocism3 += x;
+    }
 }

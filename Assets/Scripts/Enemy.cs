@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR.ARFoundation;
 
 public class Enemy : MonoBehaviour
@@ -13,15 +14,17 @@ public class Enemy : MonoBehaviour
     public float moveSpeed = 0.5f; // 초당 이동 속도
     public Camera arCamera;
     public bool detect = false;
+    public string objectname;
     public int part;
     public CameraFilter cameraFilter;
     int Counter = 2;
     float CounterTerm = 3.0f;
     float CounterTimer = 0.0f;
+    public ARSceneManager sceneManager;
 
     Vector3 initScale;
-    public float visibilityDistance = 1.0f; // 보이는 거리
-
+    public float visibilityDistance; // 보이는 거리
+    public float triggerDistance;
     void Start()
     {
         initScale = transform.localScale;
@@ -62,8 +65,15 @@ public class Enemy : MonoBehaviour
 
             // 게임 오브젝트의 위치를 이동시킵니다.
             transform.position += moveAmount;
-
+            if(distance < triggerDistance)
+            {
+                if(objectname == "priest")
+                {
+                    SceneManager.LoadScene("PriestEnding", LoadSceneMode.Single);
+                }
+                sceneManager.GoToDefeat();
+            }
         }
-
+        
     }
 }
