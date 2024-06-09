@@ -9,12 +9,14 @@ public class ARObjectClickHandler : MonoBehaviour
     int exocism1 = 0;
     int exocism2 = 0;
     int exocism3 = 0;
-
+    public ARPlaceOnPlane AROP;
     public ARRaycastManager _arRaycastManager;
     public TextMeshProUGUI item1;
     public TextMeshProUGUI item2;
     public TextMeshProUGUI item3;
     private static List<ARRaycastHit> _hits = new List<ARRaycastHit>();
+    [SerializeField]
+    private LayerMask _ignoreLayer;
 
     void Start()
     {
@@ -39,30 +41,70 @@ public class ARObjectClickHandler : MonoBehaviour
                     RaycastHit hitObject;
                     if (Physics.Raycast(ray, out hitObject))
                     {
+                        
                         Item arObject = hitObject.transform.GetComponent<Item>();
+                        GameObject arObj = arObject.gameObject;
                         if (arObject != null)
                         {
                             if (arObject.part == 1)
                             {
                                 exocism1++;
-                                item1.text = exocism1.ToString();
+                                
                             }
                             else if (arObject.part == 2)
                             {
                                 exocism2++;
-                                item2.text = exocism2.ToString();
+                                
                             }
                             else if (arObject.part == 3)
                             {
                                 exocism3++;
-                                item3.text = exocism3.ToString();
+                                
                             }
-                                arObject.OnObjectTouched();
+                            AROP.spawnItemList.Remove(arObj);
+                            arObject.OnObjectTouched();
                         }
                     }
+                    //RaycastHit[] hitObjects = Physics.RaycastAll(ray, Mathf.Infinity, ~_ignoreLayer);
+                    //foreach (RaycastHit hitObject1 in hitObjects)
+                    //{
+                    //    // 태그가 "Ignore"인 오브젝트 무시
+                    //    if (hitObject1.transform.CompareTag("Ignore Raycast"))
+                    //    {
+                    //        continue;
+                    //    }
+
+
+                    //    Item arObject = hitObject1.transform.GetComponent<Item>();
+                    //    GameObject arObj = arObject.gameObject;
+                    //    if (arObject != null)
+                    //    {
+                    //        if (arObject.part == 1)
+                    //        {
+                    //            exocism1++;
+
+                    //        }
+                    //        else if (arObject.part == 2)
+                    //        {
+                    //            exocism2++;
+
+                    //        }
+                    //        else if (arObject.part == 3)
+                    //        {
+                    //            exocism3++;
+
+                    //        }
+                    //        AROP.spawnItemList.Remove(arObj);
+                    //        arObject.OnObjectTouched();
+                    //    }
+                    //    break;
+                    //}
                 }
             }
         }
+        item1.text = exocism1.ToString();
+        item2.text = exocism2.ToString();
+        item3.text = exocism3.ToString();
     }
     public int Getexocism1()
     {

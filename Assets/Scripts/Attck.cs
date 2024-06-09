@@ -39,11 +39,14 @@ public class Attck : MonoBehaviour
             Vector3 objectScreenPosition = Camera.current.WorldToScreenPoint(spawnGhost.transform.position);
 
             // 감지 영역 내에 오브젝트가 있는지 확인
-            if (Vector3.Distance(worldCenter, spawnGhost.transform.position) < 1.0f && Mathf.Abs(objectScreenPosition.x - screenCenter.x) < screenWidth / 2 && Mathf.Abs(objectScreenPosition.y - screenCenter.y) < screenHeight / 2)
+            if (Vector3.Distance(worldCenter, spawnGhost.transform.position) < 2.0f && Mathf.Abs(objectScreenPosition.x - screenCenter.x) < screenWidth / 2 && Mathf.Abs(objectScreenPosition.y - screenCenter.y) < screenHeight / 2)
             {
                 if(panel == spawnGhost.GetComponent<Enemy>().part)
                 {
-                    arPlaceOnPlane.spawnList.Remove(spawnGhost);
+                    if (arPlaceOnPlane.spawnList.Remove(spawnGhost))
+                    {
+                        arObjectClickHandler.Setexocism1(10);
+                    }
                     Destroy(spawnGhost.gameObject);
                     return true;
                 }

@@ -71,7 +71,7 @@ public class Enemy : MonoBehaviour
                 {
                     SceneManager.LoadScene("PriestEnding", LoadSceneMode.Single);
                 }
-                sceneManager.GoToDefeat();
+                sceneManager.GoToPreistDefeat();
             }
         }
         

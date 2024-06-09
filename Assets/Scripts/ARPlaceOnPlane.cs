@@ -42,8 +42,8 @@ public class ARPlaceOnPlane : MonoBehaviour
     void Update()
     {
         DebugText.text = spawnList.Count.ToString();
-        if (spawnList.Count > 5)
-            sceneManager.GoToDefeat();
+        if (spawnList.Count > 7)
+            sceneManager.GoToPreistDefeat();
        // PlaceObjectByTouch();
         DetectGhost();
     }
@@ -72,36 +72,46 @@ public class ARPlaceOnPlane : MonoBehaviour
         int randomIndex = Random.Range(0, availablePlanes.Count);
         ARPlane selectedPlane = availablePlanes[randomIndex];
 
-        // 선택된 평면의 중심에 오브젝트 배치
-        Vector3 position = selectedPlane.transform.position;
+        // 평면의 크기를 가져옵니다.
+        Bounds planeBounds = selectedPlane.GetComponent<Renderer>().bounds;
+
+        // 평면의 범위 내에서 랜덤 위치를 계산합니다.
+        float randomX = Random.Range(planeBounds.min.x, planeBounds.max.x);
+        float randomZ = Random.Range(planeBounds.min.z, planeBounds.max.z);
+        Vector3 randomPosition = new Vector3(randomX, selectedPlane.transform.position.y, randomZ);
+
         Quaternion rotation = Quaternion.Euler(0, Random.Range(0, 360), 0); // 무작위 회전
         int index = Random.Range(0, ObjectList.Count);
-        GameObject placedObject = Instantiate(ObjectList[index], position, rotation);
-        if (cameraFilter.PanelState == placedObject.GetComponent<Enemy>().part)
-            placedObject.SetActive(true);
-        else
-            placedObject.SetActive(false);
-        placedObjects.Add(selectedPlane, placedObject);
-        spawnList.Add(placedObject);
+        GameObject placedObject = Instantiate(ObjectList[index], randomPosition, rotation);
 
         if (cameraFilter.PanelState == placedObject.GetComponent<Enemy>().part)
             placedObject.SetActive(true);
         else
             placedObject.SetActive(false);
+
+        //placedObjects.Add(selectedPlane, placedObject);
+        spawnList.Add(placedObject);
 
         randomIndex = Random.Range(0, availablePlanes.Count);
         selectedPlane = availablePlanes[randomIndex];
 
-        position = selectedPlane.transform.position;
-        rotation = Quaternion.Euler(0, Random.Range(0, 360), 0); // 무작위 회전
-        GameObject placedItem = Instantiate(ItemList[placedObject.GetComponent<Enemy>().part - 1], position, rotation);
+        planeBounds = selectedPlane.GetComponent<Renderer>().bounds;
 
-        placedObjects.Add(selectedPlane, placedItem);
-        spawnItemList.Add(placedItem);
+        // 평면의 범위 내에서 랜덤 위치를 계산합니다.
+        randomX = Random.Range(planeBounds.min.x, planeBounds.max.x);
+        randomZ = Random.Range(planeBounds.min.z, planeBounds.max.z);
+        randomPosition = new Vector3(randomX, selectedPlane.transform.position.y, randomZ);
+
+        rotation = Quaternion.Euler(0, Random.Range(0, 360), 0); // 무작위 회전
+        GameObject placedItem = Instantiate(ItemList[placedObject.GetComponent<Enemy>().part - 1], randomPosition, rotation);
+
         if (cameraFilter.PanelState == 0)
             placedItem.SetActive(true);
         else
             placedItem.SetActive(false);
+        //placedObjects.Add(selectedPlane, placedItem);
+        spawnItemList.Add(placedItem);
+
 
     }
     //private void PlaceObjectByTouch() // 터치로 생성
@@ -170,32 +180,32 @@ public class ARPlaceOnPlane : MonoBehaviour
             }
         }
     }
-    private void OnGUI()
-    {
-        // 화면 너비와 높이
-        float screenWidth = Screen.width;
-        float screenHeight = Screen.height;
+    //private void OnGUI()
+    //{
+    //    // 화면 너비와 높이
+    //    float screenWidth = Screen.width;
+    //    float screenHeight = Screen.height;
 
-        // 네모의 실제 너비와 높이
-        float rectWidth = screenWidth * detectionWidth;
-        float rectHeight = screenHeight * detectionHeight;
+    //    // 네모의 실제 너비와 높이
+    //    float rectWidth = screenWidth * detectionWidth;
+    //    float rectHeight = screenHeight * detectionHeight;
 
-        // 네모의 좌상단 위치 계산
-        float rectX = (screenWidth - rectWidth) / 2;
-        float rectY = (screenHeight - rectHeight) / 2;
+    //    // 네모의 좌상단 위치 계산
+    //    float rectX = (screenWidth - rectWidth) / 2;
+    //    float rectY = (screenHeight - rectHeight) / 2;
 
-        // 기존 GUI 색상을 저장합니다.
-        Color oldColor = GUI.color;
+    //    // 기존 GUI 색상을 저장합니다.
+    //    Color oldColor = GUI.color;
 
-        // 네모 색상을 설정합니다.
-        GUI.color = rectangleColor;
+    //    // 네모 색상을 설정합니다.
+    //    GUI.color = rectangleColor;
 
-        // 네모를 그립니다.
-        GUI.DrawTexture(new Rect(rectX, rectY, rectWidth, rectHeight), Texture2D.whiteTexture);
+    //    // 네모를 그립니다.
+    //    GUI.DrawTexture(new Rect(rectX, rectY, rectWidth, rectHeight), Texture2D.whiteTexture);
 
-        // GUI 색상을 원래대로 돌려놓습니다.
-        GUI.color = oldColor;
-    }
+    //    // GUI 색상을 원래대로 돌려놓습니다.
+    //    GUI.color = oldColor;
+    //}
     //private bool UpdateCenterObject() // 가운데에 생성
     //{
     //    Vector3 screenCenter = Camera.current.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));

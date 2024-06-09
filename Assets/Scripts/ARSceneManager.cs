@@ -18,4 +18,8 @@ public class ARSceneManager : MonoBehaviour
     {
         SceneManager.LoadScene("Defeated", LoadSceneMode.Single);
     }
+    public void GoToPreistDefeat()
+    {
+        SceneManager.LoadScene(3, LoadSceneMode.Single);
+    }
 }

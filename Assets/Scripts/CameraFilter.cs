@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 public class CameraFilter : MonoBehaviour
@@ -8,6 +9,7 @@ public class CameraFilter : MonoBehaviour
     public Image PanelImage;
     public int PanelState = 0;
     public ARPlaceOnPlane ARP;
+    public TextMeshProUGUI filterDebug;
     void Start()
     {
         PanelImage = GetComponent<Image>();
@@ -16,7 +18,7 @@ public class CameraFilter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        filterDebug.text = PanelState.ToString();
     }
     public void ChangeCameraFilter()
     {
@@ -53,15 +55,15 @@ public class CameraFilter : MonoBehaviour
         }
         if(PanelState == 1)
         {
-            PanelImage.color = new Color(1, 0, 0, 0.5f);
+            PanelImage.color = new Color(1, 0, 0, 0.3f);
         }
         if (PanelState == 2)
         {
-            PanelImage.color = new Color(0, 1, 0, 0.5f);
+            PanelImage.color = new Color(0, 1, 0, 0.3f);
         }
         if (PanelState == 3)
         {
-            PanelImage.color = new Color(0, 0, 1, 0.5f);
+            PanelImage.color = new Color(0, 0, 1, 0.3f);
         }
     }
 }
