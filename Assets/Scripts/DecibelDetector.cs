@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class DecibelDetector : MonoBehaviour
 {
     public float threshold = 1.5f;  // 데시벨 임계값 설정
     private AudioSource audioSource;
     private const int sampleWindowSize = 128;  // 분석할 샘플 크기
-    public TextMeshProUGUI DebugSound;
+    public Image mic;
     ARPlaceOnPlane ARPOP;
 
     void Start()
@@ -59,13 +59,11 @@ public class DecibelDetector : MonoBehaviour
                 Enemy temp = spawnGhost.GetComponent<Enemy>();
                 temp.CountDown();
             }
-            DebugSound.text = "Sound Detected";
-            DebugSound.color = Color.red;
+            mic.color = Color.red;
         }
         else
         {
-            DebugSound.text = "Sound Not Detected";
-            DebugSound.color = Color.white;
+            mic.color = new Color(1, 1, 1, 1);
         }
     }
 }

@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class GameStarter : MonoBehaviour
 {
-    public TextMeshProUGUI PlaneCount;
     public TextMeshProUGUI PlaneCount2;
     public ARPlaneManager planeManager;
     public GameObject GhostSpawner;
@@ -25,7 +24,6 @@ public class GameStarter : MonoBehaviour
     void Update()
     {
         int PlaneCnt = planeManager.trackables.count;
-        PlaneCount.text = PlaneCnt.ToString();
         PlaneCount2.text = PlaneCnt.ToString();
         if (PlaneCnt > minPlane)
         {

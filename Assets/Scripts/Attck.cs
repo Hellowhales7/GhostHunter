@@ -10,9 +10,14 @@ public class Attck : MonoBehaviour
     public CameraFilter arCameraFilter;
     public float detectionWidth = 0.5f; // 네모 반경의 폭 (화면 너비의 비율)
     public float detectionHeight = 0.5f; // 네모 반경의 높이 (화면 높이의 비율)
+
+    public AudioClip soundClip;  // Inspector에서 할당할 사운드 클립
+    private AudioSource audioSource;
     void Start()
     {
-        
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.clip = soundClip;
+
     }
 
     // Update is called once per frame
@@ -45,7 +50,7 @@ public class Attck : MonoBehaviour
                 {
                     if (arPlaceOnPlane.spawnList.Remove(spawnGhost))
                     {
-                        arObjectClickHandler.Setexocism1(10);
+                        PlayAttackSound();
                     }
                     Destroy(spawnGhost.gameObject);
                     return true;
@@ -77,6 +82,13 @@ public class Attck : MonoBehaviour
             {
                 arObjectClickHandler.Setexocism3(-1);
             }
+        }
+    }
+    private void PlayAttackSound()
+    {
+        if (audioSource != null && soundClip != null)
+        {
+            audioSource.PlayOneShot(soundClip);
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class PeriodicSoundPlayer : MonoBehaviour
 {
     public AudioClip soundClip;  // 재생할 사운드 클립
-    public float interval = 5.0f;  // 사운드를 반복할 간격 (초 단위)
+    public float interval = 10.0f;  // 사운드를 반복할 간격 (초 단위)
 
     private AudioSource audioSource;
     private float timer;

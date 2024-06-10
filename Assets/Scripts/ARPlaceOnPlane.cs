@@ -16,6 +16,7 @@ public class ARPlaceOnPlane : MonoBehaviour
     public TextMeshProUGUI DebugText;
     GameObject spawnObject;
 
+    public GameObject warning;
     public List<GameObject> spawnList = new List<GameObject>();
     public List<GameObject> ObjectList = new List<GameObject>();
     public GameObject[] ItemList = new GameObject[3];
@@ -28,6 +29,10 @@ public class ARPlaceOnPlane : MonoBehaviour
     public ARPlaneManager planeManager; // AR Plane Manager
     public float spawnInterval = 10f; // 오브젝트 생성 간격 (초)
     private Dictionary<ARPlane, GameObject> placedObjects = new Dictionary<ARPlane, GameObject>(); // 각 평면에 배치된 오브젝트 추적
+
+    public GameObject objectPrefab;
+    public float distanceBehind = 100.0f;
+    private ARSessionOrigin arSessionOrigin;
     void Start()
     {
         if (planeManager == null)
@@ -35,6 +40,25 @@ public class ARPlaceOnPlane : MonoBehaviour
             planeManager = FindObjectOfType<ARPlaneManager>();
         }
         InvokeRepeating("PlaceObjectOnRandomPlane", spawnInterval, spawnInterval);
+
+        //######
+        //arSessionOrigin = FindObjectOfType<ARSessionOrigin>();
+
+        //if (arSessionOrigin != null)
+        //{
+        //    AR 카메라의 위치를 가져옵니다.
+        //    Transform arCameraTransform = arSessionOrigin.camera.transform;
+
+        //    카메라의 뒤쪽 방향으로 5미터 위치를 계산합니다.
+        //   Vector3 spawnPosition = arCameraTransform.position - arCameraTransform.forward * distanceBehind;
+
+        //    오브젝트를 해당 위치에 생성합니다.
+        //    Instantiate(objectPrefab, spawnPosition, Quaternion.identity);
+        //}
+        //else
+        //{
+        //    Debug.LogError("AR Session Origin이 씬에 없습니다.");
+        //}
         // OnGUI();
     }
 
@@ -42,8 +66,15 @@ public class ARPlaceOnPlane : MonoBehaviour
     void Update()
     {
         DebugText.text = spawnList.Count.ToString();
+        if (spawnList.Count > 5)
+        {
+            warning.SetActive(true);
+        }
+        else
+            warning.SetActive(false);
         if (spawnList.Count > 7)
             sceneManager.GoToPreistDefeat();
+
        // PlaceObjectByTouch();
         DetectGhost();
     }

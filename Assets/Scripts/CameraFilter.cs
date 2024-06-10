@@ -9,7 +9,6 @@ public class CameraFilter : MonoBehaviour
     public Image PanelImage;
     public int PanelState = 0;
     public ARPlaceOnPlane ARP;
-    public TextMeshProUGUI filterDebug;
     void Start()
     {
         PanelImage = GetComponent<Image>();
@@ -18,7 +17,6 @@ public class CameraFilter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        filterDebug.text = PanelState.ToString();
     }
     public void ChangeCameraFilter()
     {
