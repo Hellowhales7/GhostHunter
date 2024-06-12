@@ -10,10 +10,11 @@ using Unity.VisualScripting;
 
 public class ARPlaceOnPlane : MonoBehaviour
 {
+    public CameraTimer Timer;
     public ARRaycastManager arRaycaster;
     public CameraFilter cameraFilter;
     public GameObject placeObject;
-    public TextMeshProUGUI DebugText;
+    //public TextMeshProUGUI DebugText;
     GameObject spawnObject;
 
     public GameObject warning;
@@ -35,6 +36,7 @@ public class ARPlaceOnPlane : MonoBehaviour
     private ARSessionOrigin arSessionOrigin;
     void Start()
     {
+        Timer.StartTimer();
         if (planeManager == null)
         {
             planeManager = FindObjectOfType<ARPlaneManager>();
@@ -65,7 +67,7 @@ public class ARPlaceOnPlane : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DebugText.text = spawnList.Count.ToString();
+        // DebugText.text = spawnList.Count.ToString();
         if (spawnList.Count > 5)
         {
             warning.SetActive(true);
@@ -73,8 +75,10 @@ public class ARPlaceOnPlane : MonoBehaviour
         else
             warning.SetActive(false);
         if (spawnList.Count > 7)
-            sceneManager.GoToPreistDefeat();
-
+        {
+            Timer.GameOver();
+            sceneManager.GoToBlackBunnyDefeat();
+        }
        // PlaceObjectByTouch();
         DetectGhost();
     }
@@ -103,10 +107,10 @@ public class ARPlaceOnPlane : MonoBehaviour
         int randomIndex = Random.Range(0, availablePlanes.Count);
         ARPlane selectedPlane = availablePlanes[randomIndex];
 
-        // 평면의 크기를 가져옵니다.
+        // 평면의 크기를 가져
         Bounds planeBounds = selectedPlane.GetComponent<Renderer>().bounds;
 
-        // 평면의 범위 내에서 랜덤 위치를 계산합니다.
+        // 평면의 범위 내에서 랜덤 위치를 계산
         float randomX = Random.Range(planeBounds.min.x, planeBounds.max.x);
         float randomZ = Random.Range(planeBounds.min.z, planeBounds.max.z);
         Vector3 randomPosition = new Vector3(randomX, selectedPlane.transform.position.y, randomZ);
@@ -188,7 +192,7 @@ public class ARPlaceOnPlane : MonoBehaviour
         // 감지 영역 내에 오브젝트가 있는지 확인
         if (Vector3.Distance(worldCenter, spawnObject.transform.position) < 1.0f && Mathf.Abs(objectScreenPosition.x - screenCenter.x) < screenWidth / 2 && Mathf.Abs(objectScreenPosition.y - screenCenter.y) < screenHeight / 2)
         {
-            DebugText.text = "Detect Ghost";
+            //DebugText.text = "Detect Ghost";
             Enemy Temp = spawnObject.GetComponent<Enemy>();
             Temp.detect = true;
             // 중앙 네모 반경 내에 있을 때 원하는 동작 실행
@@ -202,9 +206,9 @@ public class ARPlaceOnPlane : MonoBehaviour
             objectScreenPosition = Camera.current.WorldToScreenPoint(spawnGhost.transform.position);
 
             // 감지 영역 내에 오브젝트가 있는지 확인
-            if (Vector3.Distance(worldCenter, spawnGhost.transform.position) < 1.0f && Mathf.Abs(objectScreenPosition.x - screenCenter.x) < screenWidth / 2 && Mathf.Abs(objectScreenPosition.y - screenCenter.y) < screenHeight / 2)
+            if (Vector3.Distance(worldCenter, spawnGhost.transform.position) < 3.0f && Mathf.Abs(objectScreenPosition.x - screenCenter.x) < screenWidth / 2 && Mathf.Abs(objectScreenPosition.y - screenCenter.y) < screenHeight / 2)
             {
-                DebugText.text = "Detect Ghost : " + spawnGhost.name;
+                //DebugText.text = "Detect Ghost : " + spawnGhost.name;
                 Enemy Temp = spawnGhost.GetComponent<Enemy>();
                 Temp.CountDown();
                 // 중앙 네모 반경 내에 있을 때 원하는 동작 실행

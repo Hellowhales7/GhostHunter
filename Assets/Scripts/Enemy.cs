@@ -9,6 +9,7 @@ using UnityEngine.XR.ARFoundation;
 public class Enemy : MonoBehaviour
 {
     // Start is called before the first frame update
+    public CameraTimer timer;
     public float rotationSpeed = 45f; // 초당 회전 각도
     private float currentRotationAngle = 0f; // 현재 회전 각도
     public float moveSpeed = 0.5f; // 초당 이동 속도
@@ -67,11 +68,19 @@ public class Enemy : MonoBehaviour
             transform.position += moveAmount;
             if(distance < triggerDistance)
             {
+                timer.GameOver();
                 if(objectname == "priest")
                 {
-                    SceneManager.LoadScene("PriestEnding", LoadSceneMode.Single);
+                    sceneManager.GoToPreistDefeat();
                 }
-                sceneManager.GoToPreistDefeat();
+                else if(objectname == "blackbunny")
+                {
+                    sceneManager.GoToBlackBunnyDefeat();
+                }
+                else
+                {
+                    sceneManager.GoToDefeat();
+                }
             }
         }
         

@@ -11,8 +11,7 @@ public class CameraTimer : MonoBehaviour
 
     void Start()
     {
-        // 타이머 시작
-        StartTimer();
+
     }
 
     void Update()
@@ -42,5 +41,9 @@ public class CameraTimer : MonoBehaviour
     public void ResetTimer()
     {
         StartTimer();  // 타이머 재시작
+    }
+    public void GameOver()
+    {
+        PlayerPrefs.SetFloat("finalTime", Time.time - startTime);
     }
 }

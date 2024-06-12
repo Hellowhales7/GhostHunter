@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Attck : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -11,15 +11,44 @@ public class Attck : MonoBehaviour
     public float detectionWidth = 0.5f; // 네모 반경의 폭 (화면 너비의 비율)
     public float detectionHeight = 0.5f; // 네모 반경의 높이 (화면 높이의 비율)
 
-    public AudioClip soundClip;  // Inspector에서 할당할 사운드 클립
+    public AudioClip cameraShutterSound;  // Inspector에서 할당할 사운드 클립
     private AudioSource audioSource;
+    public GameObject flashGameObj;
+    public Image flashImage; // 화면 밝아짐 효과를 위한 이미지
+    public float flashDuration = 0.5f; // 화면 밝아짐 효과 지속 시간
     void Start()
     {
         audioSource = gameObject.AddComponent<AudioSource>();
-        audioSource.clip = soundClip;
+        audioSource.clip = cameraShutterSound;
+        if (flashImage != null)
+        {
+            flashImage.color = new Color(1, 1, 1, 0); // 초기 색상을 투명하게 설정
+        }
+    }
+    public void TriggerCameraEffect()
+    {
+        if (cameraShutterSound != null)
+        {
+            audioSource.PlayOneShot(cameraShutterSound);
+        }
+
+        if (flashImage != null)
+        {
+            StartCoroutine(FlashEffect());
+        }
+    }
+    private IEnumerator FlashEffect()
+    {
+        // 화면 밝아짐 효과
+        flashGameObj.SetActive(true);
+        flashImage.color = new Color(1, 1, 1, 1);
+        yield return new WaitForSeconds(flashDuration / 2);
+
+        // 화면 원래대로 돌아옴
+        flashImage.color = new Color(1, 1, 1, 0);
+        flashGameObj.SetActive(false);
 
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -50,7 +79,7 @@ public class Attck : MonoBehaviour
                 {
                     if (arPlaceOnPlane.spawnList.Remove(spawnGhost))
                     {
-                        PlayAttackSound();
+                        TriggerCameraEffect();
                     }
                     Destroy(spawnGhost.gameObject);
                     return true;
@@ -82,13 +111,6 @@ public class Attck : MonoBehaviour
             {
                 arObjectClickHandler.Setexocism3(-1);
             }
-        }
-    }
-    private void PlayAttackSound()
-    {
-        if (audioSource != null && soundClip != null)
-        {
-            audioSource.PlayOneShot(soundClip);
         }
     }
 }

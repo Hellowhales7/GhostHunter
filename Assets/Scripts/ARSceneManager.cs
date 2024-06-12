@@ -22,4 +22,8 @@ public class ARSceneManager : MonoBehaviour
     {
         SceneManager.LoadScene(3, LoadSceneMode.Single);
     }
+    public void GoToBlackBunnyDefeat()
+    {
+        SceneManager.LoadScene(4, LoadSceneMode.Single);
+    }
 }
