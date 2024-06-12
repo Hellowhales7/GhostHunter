@@ -1,4 +1,4 @@
-<h1 align="center"><b>Ghost Hunter</b><img width="4.5%" height="4.5%" align="center" src="https://github.com/Hellowhales7/CasaEncantada/assets/113617650/93940090-12e0-40a2-b943-5371776b4b6e" ></h1>
+<h1 align="center"><b>Ghost Hunter</b></h1>
 
 
 <p align="center">
