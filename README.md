@@ -34,7 +34,6 @@ https://github.com/Hellowhales7/GhostHunter/assets/113617650/ca235563-1756-487d-
 - <img src="https://img.shields.io/badge/Unity-0E1128?logo=unity">**유니티 개발**
 
 
-## 라이선스 표기
 
 
 
